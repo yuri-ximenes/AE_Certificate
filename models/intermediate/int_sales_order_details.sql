@@ -1,32 +1,33 @@
-with order_details as (
-    select * from {{ ref('stg_sales__salesorderdetail') }}
-)
+with
+    fonte_itens as (
+        select * from {{ ref('stg_sales__salesorderdetail') }}
+    )
 
-, order_headers as (
-    select * from {{ ref('stg_sales__salesorderheader') }}
-)
+    , fonte_cabecalho as (
+        select * from {{ ref('stg_sales__salesorderheader') }}
+    )
 
-, final as (
-    select
-        order_details.salesorderid
-        , order_details.salesorderdetailid
-        , order_headers.customerid
-        , order_details.productid
-        , order_headers.shiptoaddressid        as addressid
-        , cast(order_headers.orderdate as date) as orderdate
-        , order_details.orderqty
-        , order_details.unitprice
-        , order_details.unitpricediscount
-        , order_details.linetotal
-        , order_headers.subtotal
-        , order_headers.taxamt
-        , order_headers.freight
-        , order_headers.totaldue
-        , order_headers.status
-        , order_headers.onlineorderflag
-    from order_details
-    inner join order_headers
-        on order_details.salesorderid = order_headers.salesorderid
-)
+    , final as (
+        select
+            fonte_itens.pk_salesorderdetail
+            , fonte_itens.fk_salesorder
+            , fonte_cabecalho.fk_customer
+            , fonte_itens.fk_product
+            , fonte_cabecalho.fk_shiptoaddress              as fk_address
+            , cast(fonte_cabecalho.orderdate as date)       as orderdate
+            , fonte_itens.orderqty
+            , fonte_itens.unitprice
+            , fonte_itens.unitpricediscount
+            , fonte_itens.linetotal
+            , fonte_cabecalho.subtotal
+            , fonte_cabecalho.taxamt
+            , fonte_cabecalho.freight
+            , fonte_cabecalho.totaldue
+            , fonte_cabecalho.status
+            , fonte_cabecalho.onlineorderflag
+        from fonte_itens
+        inner join fonte_cabecalho
+            on fonte_itens.fk_salesorder = fonte_cabecalho.pk_salesorder
+    )
 
 select * from final

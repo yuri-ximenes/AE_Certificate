@@ -1,22 +1,23 @@
-with customers as (
-    select * from {{ ref('stg_sales__customer') }}
-)
+with
+    fonte_clientes as (
+        select * from {{ ref('stg_sales__customer') }}
+    )
 
-, persons as (
-    select * from {{ ref('stg_person__person') }}
-)
+    , fonte_pessoas as (
+        select * from {{ ref('stg_person__person') }}
+    )
 
-, final as (
-    select
-        customers.customerid
-        , persons.firstname
-        , persons.middlename
-        , persons.lastname
-        , persons.title
-        , persons.persontype
-    from customers
-    inner join persons
-        on customers.personid = persons.businessentityid
-)
+    , clientes_enriquecido as (
+        select
+            fonte_clientes.pk_customer
+            , fonte_pessoas.firstname
+            , fonte_pessoas.middlename
+            , fonte_pessoas.lastname
+            , fonte_pessoas.title
+            , fonte_pessoas.persontype
+        from fonte_clientes
+        inner join fonte_pessoas
+            on fonte_clientes.fk_person = fonte_pessoas.pk_person
+    )
 
-select * from final
+select * from clientes_enriquecido

@@ -1,29 +1,30 @@
-with int_sales as (
-    select * from {{ ref('int_sales_order_details') }}
-)
+with
+    fonte_int_sales as (
+        select * from {{ ref('int_sales_order_details') }}
+    )
 
-, final as (
-    select
-        {{
-            dbt_utils.generate_surrogate_key(['salesorderid', 'salesorderdetailid'])
-        }} as sales_order_detail_key
-        , salesorderid
-        , salesorderdetailid
-        , customerid
-        , productid
-        , addressid
-        , orderdate
-        , orderqty
-        , unitprice
-        , unitpricediscount
-        , linetotal
-        , subtotal
-        , taxamt
-        , freight
-        , totaldue
-        , status
-        , onlineorderflag
-    from int_sales
-)
+    , final as (
+        select
+            {{
+                dbt_utils.generate_surrogate_key(['pk_salesorderdetail', 'fk_salesorder'])
+            }}                      as pk_fact_sales_order_detail
+            , pk_salesorderdetail
+            , fk_salesorder
+            , fk_customer
+            , fk_product
+            , fk_address
+            , orderdate
+            , orderqty
+            , unitprice
+            , unitpricediscount
+            , linetotal
+            , subtotal
+            , taxamt
+            , freight
+            , totaldue
+            , status
+            , onlineorderflag
+        from fonte_int_sales
+    )
 
 select * from final
