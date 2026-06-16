@@ -8,7 +8,6 @@ with source as (
         , personid
         , storeid
         , territoryid
-        , accountnumber
     from source
     where personid is not null
 )

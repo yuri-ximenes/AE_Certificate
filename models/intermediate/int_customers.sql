@@ -9,7 +9,6 @@ with customers as (
 , final as (
     select
         customers.customerid
-        , customers.accountnumber
         , persons.firstname
         , persons.middlename
         , persons.lastname

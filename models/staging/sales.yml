@@ -33,10 +33,6 @@ sources:
             description: "Percentual de desconto aplicado ao preço unitário."
             tests:
               - not_null
-          - name: linetotal
-            description: "Valor total da linha (calculado: orderqty * unitprice * (1 - unitpricediscount))."
-            tests:
-              - not_null
 
       - name: sales_salesorderheader
         description: "Cabeçalho de cada pedido de venda. Um pedido pode ter múltiplos itens em sales_salesorderdetail."
@@ -59,8 +55,9 @@ sources:
             tests:
               - not_null
               - accepted_values:
-                  values: [1, 2, 3, 4, 5, 6]
-                  quote: false
+                  arguments:
+                    values: [1, 2, 3, 4, 5, 6]
+                    quote: false
           - name: onlineorderflag
             description: "Indica se o pedido foi feito online (1) ou por vendedor (0)."
             tests:
@@ -100,19 +97,15 @@ sources:
             description: "FK para a loja associada ao cliente (B2B). Nulo para clientes individuais."
           - name: territoryid
             description: "FK para sales_salesterritory."
-          - name: accountnumber
-            description: "Número de conta único do cliente."
-            tests:
-              - unique
-              - not_null
 
       - name: sales_salesorderheadersalesreason
         description: "Tabela de associação M:N entre pedidos e motivos de venda."
         tests:
           - dbt_utils.unique_combination_of_columns:
-              combination_of_columns:
-                - salesorderid
-                - salesreasonid
+              arguments:
+                combination_of_columns:
+                  - salesorderid
+                  - salesreasonid
         columns:
           - name: salesorderid
             description: "FK para sales_salesorderheader."

@@ -10,7 +10,7 @@ with source as (
         , productid
         , unitprice
         , unitpricediscount
-        , linetotal
+        , orderqty * unitprice * (1 - unitpricediscount) as linetotal
     from source
 )
 

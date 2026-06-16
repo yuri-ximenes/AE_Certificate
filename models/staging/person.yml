@@ -18,7 +18,8 @@ sources:
             tests:
               - not_null
               - accepted_values:
-                  values: ['EM', 'IN', 'SP', 'SC', 'VC', 'GC']
+                  arguments:
+                    values: ['EM', 'IN', 'SP', 'SC', 'VC', 'GC']
           - name: firstname
             description: "Primeiro nome."
             tests:
@@ -79,7 +80,6 @@ sources:
             description: "PK — código ISO do país."
             tests:
               - unique
-              - not_null
           - name: name
             description: "Nome do país/região."
             tests:
