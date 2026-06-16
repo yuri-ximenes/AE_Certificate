@@ -4,7 +4,9 @@ with int_sales as (
 
 , final as (
     select
-        {{ dbt_utils.generate_surrogate_key(['salesorderid', 'salesorderdetailid']) }}  as sales_order_detail_key
+        {{
+            dbt_utils.generate_surrogate_key(['salesorderid', 'salesorderdetailid'])
+        }} as sales_order_detail_key
         , salesorderid
         , salesorderdetailid
         , customerid
