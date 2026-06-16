@@ -1,0 +1,86 @@
+version: 2
+
+sources:
+  - name: person
+    database: fea_academy
+    schema: adventure_works
+    tables:
+      - name: person_person
+        description: "Pessoas cadastradas no sistema: funcionários, clientes individuais e fornecedores."
+        columns:
+          - name: businessentityid
+            description: "PK da pessoa. Usado como FK em outras tabelas."
+            data_tests:
+              - unique
+              - not_null
+          - name: persontype
+            description: "Tipo de pessoa: EM = Employee, IN = Individual customer, SP = Store customer, VC = Vendor."
+            data_tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: ['EM', 'IN', 'SP', 'SC', 'VC', 'GC']
+          - name: firstname
+            description: "Primeiro nome."
+            data_tests:
+              - not_null
+          - name: middlename
+            description: "Nome do meio."
+          - name: lastname
+            description: "Sobrenome."
+            data_tests:
+              - not_null
+          - name: title
+            description: "Título de cortesia (Mr., Ms., Dr., etc.)."
+
+      - name: person_address
+        description: "Endereços de clientes, funcionários e fornecedores."
+        columns:
+          - name: addressid
+            description: "PK do endereço."
+            data_tests:
+              - unique
+              - not_null
+          - name: city
+            description: "Cidade."
+            data_tests:
+              - not_null
+          - name: stateprovinceid
+            description: "FK para person_stateprovince."
+            data_tests:
+              - not_null
+
+      - name: person_stateprovince
+        description: "Estados e províncias por país."
+        columns:
+          - name: stateprovinceid
+            description: "PK do estado/província."
+            data_tests:
+              - unique
+              - not_null
+          - name: stateprovincecode
+            description: "Código ISO do estado/província."
+            data_tests:
+              - not_null
+          - name: countryregioncode
+            description: "FK para person_countryregion."
+            data_tests:
+              - not_null
+          - name: name
+            description: "Nome do estado/província."
+            data_tests:
+              - not_null
+          - name: territoryid
+            description: "FK para sales_salesterritory."
+
+      - name: person_countryregion
+        description: "Países e regiões."
+        columns:
+          - name: countryregioncode
+            description: "PK — código ISO do país."
+            data_tests:
+              - unique
+          - name: name
+            description: "Nome do país/região."
+            data_tests:
+              - not_null
