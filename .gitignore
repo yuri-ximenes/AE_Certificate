@@ -1,5 +1,12 @@
 target/
 dbt_packages/
+dbt_internal_packages/
+dbt_modules/
 logs/
+venv/
+
 .env
 *.duckdb
+.DS_Store
+desktop.ini
+*:Zone.Identifier

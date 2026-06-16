@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Star Schema - Adventure Works" id="star-schema-aw">
+    <mxGraphModel dx="1290" dy="772" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1240" pageHeight="820" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n_fact" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="fact_sales_order_details&#xa;(grain: 1 row = 1 sales order detail line)&#xa;&#xa;PK  sales_order_detail_sk&#xa;    (surrogate: hash of sales_order_id + sales_order_detail_id)&#xa;&#xa;Degenerate dims:&#xa;  sales_order_id&#xa;  sales_order_detail_id&#xa;&#xa;FK  product_sk&#xa;FK  customer_sk&#xa;FK  geography_sk&#xa;FK  date_sk&#xa;&#xa;Measures:&#xa;  order_qty&#xa;  unit_price&#xa;  unit_price_discount" vertex="1">
+          <mxGeometry height="260" width="320" x="440" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_products" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_products&#xa;&#xa;PK  product_sk&#xa;    product_id (natural key)&#xa;&#xa;-- add attributes from --&#xa;production_product&#xa;production_productsubcategory&#xa;production_productcategory" vertex="1">
+          <mxGeometry height="160" width="260" x="520" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_customers" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_customers&#xa;&#xa;PK  customer_sk&#xa;    customer_id / person_id (natural key)&#xa;&#xa;-- add attributes from --&#xa;sales_customer&#xa;person_person&#xa;(store/B2B customers out of scope)" vertex="1">
+          <mxGeometry height="160" width="260" x="900" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_geography" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_geography&#xa;(via ship-to address)&#xa;&#xa;PK  geography_sk&#xa;    address_id (natural key)&#xa;&#xa;-- add attributes from --&#xa;person_address&#xa;person_stateprovince&#xa;person_countryregion&#xa;sales_salesterritory" vertex="1">
+          <mxGeometry height="170" width="260" x="40" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_dates" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_dates&#xa;&#xa;PK  date_sk&#xa;    (the date itself)&#xa;&#xa;-- add attributes --&#xa;year, quarter, month,&#xa;month_name, day, weekday..." vertex="1">
+          <mxGeometry height="140" width="260" x="450" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="n_bridge" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="bridge_sales_order_reasons&#xa;(grain: 1 row = 1 order/reason pair)&#xa;&#xa;FK  sales_order_id&#xa;    (degenerate dim on fact)&#xa;FK  sales_reason_sk&#xa;&#xa;source: sales_salesorderheadersalesreason" vertex="1">
+          <mxGeometry height="140" width="260" x="850" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_sales_reasons" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_sales_reasons&#xa;&#xa;PK  sales_reason_sk&#xa;    sales_reason_id (natural key)&#xa;&#xa;-- attributes from --&#xa;sales_salesreason&#xa;  name&#xa;  reason_type" vertex="1">
+          <mxGeometry height="150" width="260" x="1180" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="e_products_fact" edge="1" parent="1" source="n_dim_products" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fact" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_customers_fact" edge="1" parent="1" source="n_dim_customers" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fact" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_geography_fact" edge="1" parent="1" source="n_dim_geography" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fact" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dates_fact" edge="1" parent="1" source="n_dim_dates" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fact" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_fact_bridge" edge="1" parent="1" source="n_fact" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_bridge" value="1:N&#xa;(sales_order_id)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bridge_reasons" edge="1" parent="1" source="n_bridge" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n_dim_sales_reasons" value="N:1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: person
+    database: fea_academy
+    schema: adventure_works
+    tables:
+      - name: person_person
+        description: "Pessoas cadastradas no sistema: funcionários, clientes individuais e fornecedores."
+        columns:
+          - name: businessentityid
+            description: "PK da pessoa. Usado como FK em outras tabelas."
+          - name: persontype
+            description: "Tipo de pessoa: EM = Employee, IN = Individual customer, SP = Store customer, VC = Vendor."
+          - name: firstname
+            description: "Primeiro nome."
+          - name: middlename
+            description: "Nome do meio."
+          - name: lastname
+            description: "Sobrenome."
+          - name: title
+            description: "Título de cortesia (Mr., Ms., Dr., etc.)."
+
+      - name: person_address
+        description: "Endereços de clientes, funcionários e fornecedores."
+        columns:
+          - name: addressid
+            description: "PK do endereço."
+          - name: city
+            description: "Cidade."
+          - name: stateprovinceid
+            description: "FK para person_stateprovince."
+
+      - name: person_stateprovince
+        description: "Estados e províncias por país."
+        columns:
+          - name: stateprovinceid
+            description: "PK do estado/província."
+          - name: stateprovincecode
+            description: "Código ISO do estado/província."
+          - name: countryregioncode
+            description: "FK para person_countryregion."
+          - name: name
+            description: "Nome do estado/província."
+          - name: territoryid
+            description: "FK para sales_salesterritory."
+
+      - name: person_countryregion
+        description: "Países e regiões."
+        columns:
+          - name: countryregioncode
+            description: "PK — código ISO do país."
+          - name: name
+            description: "Nome do país/região."

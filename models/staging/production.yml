@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: production
+    database: fea_academy
+    schema: adventure_works
+    tables:
+      - name: production_product
+        description: "Produtos vendidos ou usados na fabricação da Adventure Works."
+        columns:
+          - name: productid
+            description: "PK do produto."
+          - name: name
+            description: "Nome do produto."
+          - name: listprice
+            description: "Preço de lista do produto."
+          - name: standardcost
+            description: "Custo padrão de fabricação do produto."
+          - name: productsubcategoryid
+            description: "FK para production_productsubcategory. Nulo se o produto não pertence a nenhuma subcategoria."
+
+      - name: production_productsubcategory
+        description: "Subcategorias de produtos (nível intermediário da hierarquia)."
+        columns:
+          - name: productsubcategoryid
+            description: "PK da subcategoria."
+          - name: productcategoryid
+            description: "FK para production_productcategory."
+          - name: name
+            description: "Nome da subcategoria."
+
+      - name: production_productcategory
+        description: "Categorias de produtos (nível mais alto da hierarquia: Bikes, Components, Clothing, Accessories)."
+        columns:
+          - name: productcategoryid
+            description: "PK da categoria."
+          - name: name
+            description: "Nome da categoria."

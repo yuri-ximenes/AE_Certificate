@@ -17,9 +17,8 @@ clean-targets:
 
 models:
   adventure_works:
+    +materialized: ephemeral
     staging:
-      +materialized: view
-    intermediate:
       +materialized: view
     marts:
       +materialized: table

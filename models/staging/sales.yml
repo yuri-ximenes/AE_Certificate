@@ -1,0 +1,98 @@
+version: 2
+
+sources:
+  - name: sales
+    database: fea_academy
+    schema: adventure_works
+    tables:
+      - name: sales_salesorderdetail
+        description: "Itens individuais de cada pedido de venda. Grão: 1 linha por produto por pedido."
+        columns:
+          - name: salesorderid
+            description: "FK para sales_salesorderheader."
+          - name: salesorderdetailid
+            description: "PK da linha do pedido."
+          - name: orderqty
+            description: "Quantidade do produto pedida."
+          - name: productid
+            description: "FK para production_product."
+          - name: unitprice
+            description: "Preço unitário de venda."
+          - name: unitpricediscount
+            description: "Percentual de desconto aplicado ao preço unitário."
+          - name: linetotal
+            description: "Valor total da linha (calculado: orderqty * unitprice * (1 - unitpricediscount))."
+
+      - name: sales_salesorderheader
+        description: "Cabeçalho de cada pedido de venda. Um pedido pode ter múltiplos itens em sales_salesorderdetail."
+        columns:
+          - name: salesorderid
+            description: "PK do pedido."
+          - name: orderdate
+            description: "Data em que o pedido foi feito."
+          - name: duedate
+            description: "Data prevista de entrega."
+          - name: shipdate
+            description: "Data de envio do pedido."
+          - name: status
+            description: "Status do pedido: 1=In process, 2=Approved, 3=Backordered, 4=Rejected, 5=Shipped, 6=Cancelled."
+          - name: onlineorderflag
+            description: "Indica se o pedido foi feito online (1) ou por vendedor (0)."
+          - name: customerid
+            description: "FK para sales_customer."
+          - name: territoryid
+            description: "FK para sales_salesterritory."
+          - name: shiptoaddressid
+            description: "FK para person_address — endereço de entrega."
+          - name: subtotal
+            description: "Subtotal do pedido (antes de impostos e frete)."
+          - name: taxamt
+            description: "Valor total de impostos."
+          - name: freight
+            description: "Valor do frete."
+          - name: totaldue
+            description: "Valor total do pedido (subtotal + taxamt + freight)."
+
+      - name: sales_customer
+        description: "Clientes da Adventure Works. Pode ser pessoa física (personid preenchido) ou loja (storeid preenchido)."
+        columns:
+          - name: customerid
+            description: "PK do cliente."
+          - name: personid
+            description: "FK para person_person. Nulo para clientes do tipo loja (B2B)."
+          - name: storeid
+            description: "FK para a loja associada ao cliente (B2B). Nulo para clientes individuais."
+          - name: territoryid
+            description: "FK para sales_salesterritory."
+          - name: accountnumber
+            description: "Número de conta único do cliente."
+
+      - name: sales_salesorderheadersalesreason
+        description: "Tabela de associação M:N entre pedidos e motivos de venda."
+        columns:
+          - name: salesorderid
+            description: "FK para sales_salesorderheader."
+          - name: salesreasonid
+            description: "FK para sales_salesreason."
+
+      - name: sales_salesreason
+        description: "Motivos de venda catalogados."
+        columns:
+          - name: salesreasonid
+            description: "PK do motivo."
+          - name: name
+            description: "Descrição do motivo (ex: Price, Quality, Manufacturer)."
+          - name: reasontype
+            description: "Categoria do motivo (ex: Other, Promotion, Marketing)."
+
+      - name: sales_salesterritory
+        description: "Territórios de venda usados para segmentação geográfica e metas."
+        columns:
+          - name: territoryid
+            description: "PK do território."
+          - name: name
+            description: "Nome do território."
+          - name: countryregioncode
+            description: "FK para person_countryregion."
+          - name: group
+            description: "Grupo geográfico do território (ex: North America, Europe, Pacific)."
