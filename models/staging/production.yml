@@ -10,12 +10,21 @@ sources:
         columns:
           - name: productid
             description: "PK do produto."
+            tests:
+              - unique
+              - not_null
           - name: name
             description: "Nome do produto."
+            tests:
+              - not_null
           - name: listprice
             description: "Preço de lista do produto."
+            tests:
+              - not_null
           - name: standardcost
             description: "Custo padrão de fabricação do produto."
+            tests:
+              - not_null
           - name: productsubcategoryid
             description: "FK para production_productsubcategory. Nulo se o produto não pertence a nenhuma subcategoria."
 
@@ -24,15 +33,27 @@ sources:
         columns:
           - name: productsubcategoryid
             description: "PK da subcategoria."
+            tests:
+              - unique
+              - not_null
           - name: productcategoryid
             description: "FK para production_productcategory."
+            tests:
+              - not_null
           - name: name
             description: "Nome da subcategoria."
+            tests:
+              - not_null
 
       - name: production_productcategory
         description: "Categorias de produtos (nível mais alto da hierarquia: Bikes, Components, Clothing, Accessories)."
         columns:
           - name: productcategoryid
             description: "PK da categoria."
+            tests:
+              - unique
+              - not_null
           - name: name
             description: "Nome da categoria."
+            tests:
+              - not_null

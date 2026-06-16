@@ -10,40 +10,71 @@ sources:
         columns:
           - name: salesorderid
             description: "FK para sales_salesorderheader."
+            tests:
+              - not_null
           - name: salesorderdetailid
             description: "PK da linha do pedido."
+            tests:
+              - unique
+              - not_null
           - name: orderqty
             description: "Quantidade do produto pedida."
+            tests:
+              - not_null
           - name: productid
             description: "FK para production_product."
+            tests:
+              - not_null
           - name: unitprice
             description: "Preço unitário de venda."
+            tests:
+              - not_null
           - name: unitpricediscount
             description: "Percentual de desconto aplicado ao preço unitário."
+            tests:
+              - not_null
           - name: linetotal
             description: "Valor total da linha (calculado: orderqty * unitprice * (1 - unitpricediscount))."
+            tests:
+              - not_null
 
       - name: sales_salesorderheader
         description: "Cabeçalho de cada pedido de venda. Um pedido pode ter múltiplos itens em sales_salesorderdetail."
         columns:
           - name: salesorderid
             description: "PK do pedido."
+            tests:
+              - unique
+              - not_null
           - name: orderdate
             description: "Data em que o pedido foi feito."
+            tests:
+              - not_null
           - name: duedate
             description: "Data prevista de entrega."
           - name: shipdate
             description: "Data de envio do pedido."
           - name: status
             description: "Status do pedido: 1=In process, 2=Approved, 3=Backordered, 4=Rejected, 5=Shipped, 6=Cancelled."
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [1, 2, 3, 4, 5, 6]
+                  quote: false
           - name: onlineorderflag
             description: "Indica se o pedido foi feito online (1) ou por vendedor (0)."
+            tests:
+              - not_null
           - name: customerid
             description: "FK para sales_customer."
+            tests:
+              - not_null
           - name: territoryid
             description: "FK para sales_salesterritory."
           - name: shiptoaddressid
             description: "FK para person_address — endereço de entrega."
+            tests:
+              - not_null
           - name: subtotal
             description: "Subtotal do pedido (antes de impostos e frete)."
           - name: taxamt
@@ -52,12 +83,17 @@ sources:
             description: "Valor do frete."
           - name: totaldue
             description: "Valor total do pedido (subtotal + taxamt + freight)."
+            tests:
+              - not_null
 
       - name: sales_customer
         description: "Clientes da Adventure Works. Pode ser pessoa física (personid preenchido) ou loja (storeid preenchido)."
         columns:
           - name: customerid
             description: "PK do cliente."
+            tests:
+              - unique
+              - not_null
           - name: personid
             description: "FK para person_person. Nulo para clientes do tipo loja (B2B)."
           - name: storeid
@@ -66,33 +102,61 @@ sources:
             description: "FK para sales_salesterritory."
           - name: accountnumber
             description: "Número de conta único do cliente."
+            tests:
+              - unique
+              - not_null
 
       - name: sales_salesorderheadersalesreason
         description: "Tabela de associação M:N entre pedidos e motivos de venda."
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - salesorderid
+                - salesreasonid
         columns:
           - name: salesorderid
             description: "FK para sales_salesorderheader."
+            tests:
+              - not_null
           - name: salesreasonid
             description: "FK para sales_salesreason."
+            tests:
+              - not_null
 
       - name: sales_salesreason
         description: "Motivos de venda catalogados."
         columns:
           - name: salesreasonid
             description: "PK do motivo."
+            tests:
+              - unique
+              - not_null
           - name: name
             description: "Descrição do motivo (ex: Price, Quality, Manufacturer)."
+            tests:
+              - not_null
           - name: reasontype
             description: "Categoria do motivo (ex: Other, Promotion, Marketing)."
+            tests:
+              - not_null
 
       - name: sales_salesterritory
         description: "Territórios de venda usados para segmentação geográfica e metas."
         columns:
           - name: territoryid
             description: "PK do território."
+            tests:
+              - unique
+              - not_null
           - name: name
             description: "Nome do território."
+            tests:
+              - not_null
           - name: countryregioncode
             description: "FK para person_countryregion."
+            tests:
+              - not_null
           - name: group
             description: "Grupo geográfico do território (ex: North America, Europe, Pacific)."
+            tests:
+              - not_null
