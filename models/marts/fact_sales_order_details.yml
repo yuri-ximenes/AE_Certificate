@@ -1,0 +1,99 @@
+version: 2
+
+models:
+  - name: fact_sales_order_details
+    description: "Fato de itens de pedido de venda. Grão: 1 linha por produto por pedido."
+    columns:
+      - name: sales_order_detail_key
+        description: "Surrogate key (hash de salesorderid + salesorderdetailid)."
+        tests:
+          - unique
+          - not_null
+
+      - name: salesorderid
+        description: "FK para dim_sales_order_reasons."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_sales_order_reasons')
+              field: salesorderid
+
+      - name: salesorderdetailid
+        description: "Identificador da linha do pedido."
+        tests:
+          - not_null
+
+      - name: customerid
+        description: "FK para dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customerid
+
+      - name: productid
+        description: "FK para dim_products."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: productid
+
+      - name: addressid
+        description: "FK para dim_geography (endereço de entrega)."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_geography')
+              field: addressid
+
+      - name: orderdate
+        description: "FK para dim_dates."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: date_day
+
+      - name: orderqty
+        description: "Quantidade do produto pedida."
+        tests:
+          - not_null
+
+      - name: unitprice
+        description: "Preço unitário de venda."
+        tests:
+          - not_null
+
+      - name: unitpricediscount
+        description: "Percentual de desconto aplicado ao preço unitário."
+        tests:
+          - not_null
+
+      - name: linetotal
+        description: "Valor total da linha."
+        tests:
+          - not_null
+
+      - name: subtotal
+        description: "Subtotal do pedido (antes de impostos e frete)."
+
+      - name: taxamt
+        description: "Valor total de impostos do pedido."
+
+      - name: freight
+        description: "Valor do frete do pedido."
+
+      - name: totaldue
+        description: "Valor total do pedido (subtotal + taxamt + freight)."
+
+      - name: status
+        description: "Status do pedido."
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6]
+
+      - name: onlineorderflag
+        description: "Indica se o pedido foi feito online (true) ou por vendedor (false)."
+        tests:
+          - not_null
