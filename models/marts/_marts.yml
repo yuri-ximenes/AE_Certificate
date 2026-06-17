@@ -1,0 +1,173 @@
+version: 2
+
+models:
+  - name: fact_sales_order_details
+    description: >
+      Tabela fato com granularidade de 1 linha por item de pedido de venda.
+      Centraliza as métricas de vendas e referencia todas as dimensões do modelo estrela.
+      Construída a partir de sales_salesorderdetail (base) e sales_salesorderheader
+      (via fk_salesorder, para obter cliente, endereço de entrega e data do pedido).
+    columns:
+      - name: pk_fact_sales_order_detail
+        description: >
+          Chave surrogate da tabela fato, gerada via dbt_utils.generate_surrogate_key
+          a partir de pk_salesorderdetail e fk_salesorder.
+        data_tests:
+          - unique
+          - not_null
+      - name: pk_salesorderdetail
+        description: Chave natural do item do pedido, originada de sales_salesorderdetail.
+      - name: fk_salesorder
+        description: Referência ao pedido de venda em sales_salesorderheader.
+      - name: fk_customer
+        description: Chave estrangeira para dim_customers.
+      - name: fk_product
+        description: Chave estrangeira para dim_products.
+      - name: fk_address
+        description: Chave estrangeira para dim_geography (endereço de entrega do pedido).
+      - name: orderdate
+        description: Data do pedido, usada para referenciar dim_dates.
+      - name: orderqty
+        description: Quantidade de itens pedidos na linha.
+      - name: unitprice
+        description: Preço unitário do produto no momento do pedido.
+      - name: unitpricediscount
+        description: Percentual de desconto aplicado ao preço unitário (0 a 1).
+      - name: gross_linetotal
+        description: >
+          Venda bruta da linha calculada como orderqty * unitprice, sem aplicação de desconto.
+          Representa o valor bruto antes do desconto — métrica usada pela contabilidade.
+      - name: linetotal
+        description: >
+          Total líquido da linha calculado como orderqty * unitprice * (1 - unitpricediscount).
+          Coluna derivada na camada staging pois não existe na fonte.
+      - name: subtotal
+        description: Subtotal do pedido completo antes de impostos e frete.
+      - name: taxamt
+        description: Valor de imposto aplicado ao pedido.
+      - name: freight
+        description: Valor de frete do pedido.
+      - name: totaldue
+        description: Valor total do pedido incluindo subtotal, impostos e frete.
+      - name: status
+        description: >
+          Status do pedido (1=Em processamento, 2=Aprovado, 3=Pendente,
+          4=Rejeitado, 5=Enviado, 6=Cancelado).
+      - name: onlineorderflag
+        description: Indica se o pedido foi realizado online (true) ou por representante (false).
+
+  - name: dim_customers
+    description: >
+      Dimensão de clientes pessoa física. Combina dados de sales_customer com
+      informações pessoais de person_person. Clientes B2B (lojas com personid nulo)
+      são excluídos na camada staging.
+    columns:
+      - name: pk_customer
+        description: Chave primária do cliente, originada de sales_customer.
+        data_tests:
+          - unique
+          - not_null
+      - name: firstname
+        description: Primeiro nome do cliente.
+      - name: middlename
+        description: Nome do meio do cliente (pode ser nulo).
+      - name: lastname
+        description: Sobrenome do cliente.
+      - name: title
+        description: Título de tratamento do cliente (ex. Sr., Sra.).
+      - name: persontype
+        description: Tipo de pessoa no sistema Adventure Works (ex. SC = Store Contact, IN = Individual).
+
+  - name: dim_products
+    description: >
+      Dimensão de produtos com hierarquia completa de categoria. Combina
+      production_product, production_productsubcategory e production_productcategory
+      via joins na camada intermediate.
+    columns:
+      - name: pk_product
+        description: Chave primária do produto, originada de production_product.
+        data_tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Nome do produto.
+      - name: listprice
+        description: Preço de lista do produto.
+      - name: standardcost
+        description: Custo padrão de produção do produto.
+      - name: profit
+        description: Margem bruta calculada como listprice - standardcost.
+      - name: subcategory_name
+        description: Nome da subcategoria do produto (pode ser nulo para produtos sem subcategoria).
+      - name: category_name
+        description: Nome da categoria do produto (pode ser nulo para produtos sem categoria).
+
+  - name: dim_geography
+    description: >
+      Dimensão geográfica baseada no endereço de entrega do pedido (ship-to address).
+      Combina person_address, person_stateprovince, person_countryregion e
+      sales_salesterritory para oferecer visão hierárquica de localização.
+    columns:
+      - name: pk_address
+        description: Chave primária do endereço de entrega, originada de person_address.
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: Cidade do endereço de entrega.
+      - name: stateprovincecode
+        description: Código da unidade federativa ou estado.
+      - name: stateprovince_name
+        description: Nome do estado ou província.
+      - name: countryregioncode
+        description: Código ISO do país ou região.
+      - name: country_name
+        description: Nome do país.
+      - name: territory_name
+        description: Nome do território de vendas (pode ser nulo).
+      - name: territory_group
+        description: Grupo regional do território (ex. North America, Europe, Pacific).
+
+  - name: dim_dates
+    description: >
+      Dimensão de datas gerada via dbt_utils.date_spine para o período de 2011-01-01
+      a 2014-12-31, cobrindo todo o histórico de pedidos Adventure Works.
+      Não possui join com tabelas fonte; é construída inteiramente por geração de datas.
+    columns:
+      - name: date_day
+        description: Data completa, chave primária da dimensão.
+        data_tests:
+          - unique
+          - not_null
+      - name: year
+        description: Ano da data.
+      - name: quarter
+        description: Trimestre do ano (1 a 4).
+      - name: month
+        description: Número do mês (1 a 12).
+      - name: month_name
+        description: Nome do mês por extenso em inglês (ex. January).
+      - name: week_of_year
+        description: Número da semana no ano.
+      - name: day_of_week
+        description: Número do dia da semana (1=Domingo, 7=Sábado no Spark SQL).
+      - name: day_of_week_name
+        description: Nome do dia da semana por extenso em inglês (ex. Monday).
+      - name: is_weekend
+        description: Indica se o dia é fim de semana (true para Sábado e Domingo).
+
+  - name: dim_sales_order_reasons
+    description: >
+      Dimensão de motivos de pedido com granularidade de 1 linha por pedido de venda.
+      Agrega os múltiplos registros de sales_salesorderheadersalesreason usando
+      collect_set para eliminar duplicatas, resultando em campos texto separados por vírgula.
+    columns:
+      - name: pk_salesorder
+        description: Chave do pedido de venda (dimensão degenerada da tabela fato).
+        data_tests:
+          - unique
+          - not_null
+      - name: order_reasons
+        description: Lista de nomes dos motivos do pedido, separados por vírgula.
+      - name: order_reason_types
+        description: Lista dos tipos de motivo do pedido, separados por vírgula.

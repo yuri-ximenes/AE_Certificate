@@ -17,6 +17,7 @@ with
             , orderqty
             , unitprice
             , unitpricediscount
+            , orderqty * unitprice                              as gross_linetotal
             , linetotal
             , subtotal
             , taxamt
