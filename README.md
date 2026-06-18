@@ -2,6 +2,22 @@
 
 Projeto de Analytics Engineering para a Adventure Works, construído com **dbt** sobre **Databricks**.
 
+## Arquitetura do Data Warehouse
+
+Modelo estrela (Kimball) com 1 tabela fato e 6 dimensões.
+
+| Tabela | Tipo | Tabelas fonte |
+|---|---|---|
+| `fact_sales_order_details` | Fato | `sales_salesorderdetail`, `sales_salesorderheader` |
+| `dim_customers` | Dimensão | `sales_customer`, `person_person` |
+| `dim_products` | Dimensão | `production_product`, `production_productsubcategory`, `production_productcategory` |
+| `dim_geography` | Dimensão | `person_address`, `person_stateprovince`, `person_countryregion`, `sales_salesterritory` |
+| `dim_dates` | Dimensão | gerado via `dbt_utils.date_spine` — sem tabela fonte |
+| `dim_credit_cards` | Dimensão | `sales_creditcard` + linha sintética `pk=0` para pedidos sem cartão |
+| `dim_sales_order_reasons` | Dimensão | `sales_salesorderheadersalesreason`, `sales_salesreason` |
+
+O diagrama conceitual editável está em [`docs/star_schema_template_pt.drawio`](docs/star_schema_template_pt.drawio).
+
 ## Stack
 - **Data Warehouse**: Databricks (catalog `fea_academy`, schema fonte `adventure_works`)
 - **Transformação**: dbt
