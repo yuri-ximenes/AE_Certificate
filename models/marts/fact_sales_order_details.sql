@@ -25,6 +25,7 @@ with
             , totaldue
             , status
             , onlineorderflag
+            , card_type
         from fonte_int_sales
     )
 

@@ -9,6 +9,7 @@ with
             , customerid            as fk_customer
             , territoryid           as fk_territory
             , shiptoaddressid       as fk_shiptoaddress
+            , creditcardid          as fk_creditcard
             , orderdate
             , duedate
             , shipdate

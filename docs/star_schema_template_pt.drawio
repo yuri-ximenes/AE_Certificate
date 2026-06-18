@@ -1,26 +1,29 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Modelo Estrela - Adventure Works" id="star-schema-aw-pt">
-    <mxGraphModel dx="968" dy="579" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="968" dy="579" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="n_fato" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="fact_sales_order_details&#10;(granularidade: 1 linha = 1 item do pedido)&#10;&#10;PK/SK  sales_order_detail_sk&#10;       (hash de sales_order_id +&#10;        sales_order_detail_id)&#10;&#10;Dimens&#245;es degeneradas:&#10;  sales_order_id, sales_order_detail_id&#10;&#10;FK  product_sk, customer_sk,&#10;    geography_sk, date_sk&#10;&#10;M&#233;tricas:&#10;  order_qty, unit_price,&#10;  unit_price_discount&#10;&#10;Origem (joins):&#10;  sales_salesorderdetail (base, direto)&#10;  + sales_salesorderheader (via salesorderid)&#10;    -&gt; customerid, shiptoaddressid, orderdate&#10;       (p/ customer_sk, geography_sk, date_sk)" vertex="1">
-          <mxGeometry height="310" width="320" x="440" y="280" as="geometry" />
+        <mxCell id="n_fato" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="fact_sales_order_details&#10;(granularidade: 1 linha = 1 item do pedido)&#10;&#10;PK/SK  pk_fact_sales_order_detail&#10;       (hash de pk_salesorderdetail +&#10;        fk_salesorder)&#10;&#10;FK  fk_customer, fk_product,&#10;    fk_address, fk_salesorder&#10;    (dim_sales_order_reasons)&#10;&#10;Dim. degenerada: status, onlineorderflag,&#10;                 card_type&#10;&#10;M&#233;tricas:&#10;  orderqty, unitprice, unitpricediscount,&#10;  gross_linetotal (sem desconto),&#10;  linetotal (com desconto),&#10;  subtotal, taxamt, freight, totaldue&#10;&#10;Origem (joins):&#10;  sales_salesorderdetail (base)&#10;  + sales_salesorderheader (via salesorderid)&#10;    -&gt; fk_customer, fk_address, orderdate&#10;  + sales_creditcard (via creditcardid)&#10;    -&gt; card_type" vertex="1">
+          <mxGeometry height="360" width="340" x="480" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="n_dim_produtos" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_products&#10;&#10;PK/SK  product_sk&#10;NK     product_id&#10;&#10;Origem (joins):&#10;  production_product (direto)&#10;  + production_productsubcategory&#10;    via productsubcategoryid&#10;    -&gt; subcategoria&#10;  + production_productcategory&#10;    via productcategoryid&#10;    -&gt; categoria" vertex="1">
-          <mxGeometry height="200" width="260" x="520" y="20" as="geometry" />
+        <mxCell id="n_dim_produtos" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_products&#10;&#10;PK  pk_product&#10;&#10;Atributos:&#10;  product_name, listprice,&#10;  standardcost, profit,&#10;  subcategory_name, category_name&#10;&#10;Origem (joins):&#10;  production_product (direto)&#10;  + production_productsubcategory&#10;    via productsubcategoryid&#10;  + production_productcategory&#10;    via productcategoryid" vertex="1">
+          <mxGeometry height="210" width="270" x="560" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="n_dim_clientes" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_customers&#10;&#10;PK/SK  customer_sk&#10;NK     customer_id / person_id&#10;&#10;Origem (joins):&#10;  sales_customer (direto)&#10;  + person_person via personid&#10;    -&gt; nome, sobrenome etc.&#10;  (clientes loja/B2B: personid nulo,&#10;   fora do escopo)" vertex="1">
-          <mxGeometry height="180" width="260" x="900" y="160" as="geometry" />
+        <mxCell id="n_dim_clientes" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_customers&#10;&#10;PK  pk_customer&#10;&#10;Atributos:&#10;  firstname, middlename, lastname,&#10;  title, persontype&#10;&#10;Origem (joins):&#10;  sales_customer (direto)&#10;  + person_person via personid&#10;  (B2B exclu&#237;do: personid nulo)" vertex="1">
+          <mxGeometry height="190" width="270" x="1000" y="180" as="geometry" />
         </mxCell>
-        <mxCell id="n_dim_geografia" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_geography&#10;(via endere&#231;o de entrega - ship-to)&#10;&#10;PK/SK  geography_sk&#10;NK     address_id&#10;&#10;Origem (joins):&#10;  person_address (direto, via&#10;    shiptoaddressid do pedido)&#10;  + person_stateprovince via&#10;    stateprovinceid -&gt; estado,&#10;    territoryid&#10;  + person_countryregion via&#10;    countryregioncode -&gt; pa&#237;s&#10;  + sales_salesterritory via&#10;    territoryid -&gt; territ&#243;rio" vertex="1">
-          <mxGeometry height="240" width="260" x="40" y="320" as="geometry" />
+        <mxCell id="n_dim_geografia" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_geography&#10;(via endere&#231;o de entrega - ship-to)&#10;&#10;PK  pk_address&#10;&#10;Atributos:&#10;  city, stateprovincecode,&#10;  stateprovince_name, countryregioncode,&#10;  country_name, territory_name,&#10;  territory_group&#10;&#10;Origem (joins):&#10;  person_address (via shiptoaddressid)&#10;  + person_stateprovince&#10;  + person_countryregion&#10;  + sales_salesterritory" vertex="1">
+          <mxGeometry height="250" width="270" x="50" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="n_dim_datas" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_dates&#10;&#10;PK/SK  date_sk&#10;       (a pr&#243;pria data)&#10;&#10;Atributos (gerados):&#10;  ano, trimestre, m&#234;s, nome do m&#234;s,&#10;  dia, dia da semana...&#10;&#10;Origem:&#10;  gerado via date spine&#10;  (sem join com fontes;&#10;   base: orderdate do&#10;   sales_salesorderheader)" vertex="1">
-          <mxGeometry height="210" width="260" x="450" y="640" as="geometry" />
+        <mxCell id="n_dim_datas" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_dates&#10;&#10;PK  date_day&#10;&#10;Atributos (gerados):&#10;  year, quarter, month, month_name,&#10;  week_of_year, day_of_week,&#10;  day_of_week_name, is_weekend&#10;&#10;Origem:&#10;  gerado via dbt_utils.date_spine&#10;  (2011-01-01 a 2014-12-31)&#10;  sem join com fontes" vertex="1">
+          <mxGeometry height="220" width="270" x="490" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="n_dim_order_reasons" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_sales_order_reasons&#10;(1 linha = 1 pedido)&#10;&#10;PK  sales_order_id&#10;    (= dim. degenerada do fato)&#10;&#10;Atributos:&#10;  reason_names&#10;  reason_types&#10;&#10;Origem: sales_salesorderheadersalesreason&#10;+ sales_salesreason (via salesreasonid)" vertex="1">
-          <mxGeometry height="190" width="300" x="850" y="550" as="geometry" />
+        <mxCell id="n_dim_order_reasons" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="dim_sales_order_reasons&#10;(1 linha = 1 pedido)&#10;&#10;PK  pk_salesorder&#10;    (dim. degenerada do fato)&#10;&#10;Atributos:&#10;  order_reasons (texto agregado)&#10;  order_reason_types (texto agregado)&#10;&#10;Origem:&#10;  sales_salesorderheadersalesreason&#10;  + sales_salesreason (via salesreasonid)&#10;  GROUP BY salesorderid com collect_set" vertex="1">
+          <mxGeometry height="220" width="290" x="960" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dim_creditcard" parent="1" style="rounded=0;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="(dim. degenerada na fato)&#10;card_type&#10;&#10;Valores poss&#237;veis:&#10;  Vista, SuperiorCard,&#10;  ColonialVoice, Distinguish&#10;  (nulo = sem cart&#227;o)&#10;&#10;Origem:&#10;  sales_creditcard via creditcardid&#10;  do sales_salesorderheader" vertex="1">
+          <mxGeometry height="170" width="230" x="80" y="640" as="geometry" />
         </mxCell>
         <mxCell id="e_produtos_fato" edge="1" parent="1" source="n_dim_produtos" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fato" value="1:N">
           <mxGeometry relative="1" as="geometry" />
@@ -37,8 +40,8 @@
         <mxCell id="e_order_reasons_fato" edge="1" parent="1" source="n_dim_order_reasons" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;" target="n_fato" value="1:N">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_nota" parent="1" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=2" value="Nota: esta dimens&#227;o ser&#225; constru&#237;da agregando&#10;sales_salesorderheadersalesreason + sales_salesreason&#10;(join por salesreasonid), com GROUP BY salesorderid.&#10;Usa collect_set(name)/collect_set(reasontype) para juntar&#10;os motivos do pedido em arrays, e concat_ws(', ', ...) para&#10;gerar reason_names/reason_types como texto leg&#237;vel.&#10;Resultado: 1 linha por sales_order_id, 1:N com a fato." vertex="1">
-          <mxGeometry height="110" width="420" x="850" y="760" as="geometry" />
+        <mxCell id="e_creditcard_fato" edge="1" parent="1" source="n_dim_creditcard" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=0;fontSize=10;dashed=1;" target="n_fato" value="dim. degenerada">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

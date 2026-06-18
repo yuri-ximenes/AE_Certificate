@@ -133,6 +133,19 @@ sources:
             data_tests:
               - not_null
 
+      - name: sales_creditcard
+        description: "Cartões de crédito utilizados nos pedidos de venda."
+        columns:
+          - name: creditcardid
+            description: "PK do cartão de crédito."
+            data_tests:
+              - unique
+              - not_null
+          - name: cardtype
+            description: "Bandeira do cartão (ex: Vista, SuperiorCard, ColonialVoice, Distinguish)."
+            data_tests:
+              - not_null
+
       - name: sales_salesterritory
         description: "Territórios de venda usados para segmentação geográfica e metas."
         columns:

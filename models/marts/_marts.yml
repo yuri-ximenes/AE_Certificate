@@ -55,6 +55,10 @@ models:
           4=Rejeitado, 5=Enviado, 6=Cancelado).
       - name: onlineorderflag
         description: Indica se o pedido foi realizado online (true) ou por representante (false).
+      - name: card_type
+        description: >
+          Bandeira do cartão de crédito utilizado no pedido (ex. Vista, SuperiorCard,
+          ColonialVoice, Distinguish). Nulo para pedidos sem cartão de crédito.
 
   - name: dim_customers
     description: >
