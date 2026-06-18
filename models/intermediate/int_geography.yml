@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: int_geography
+    description: >
+      Hierarquia geográfica completa baseada no endereço de entrega do pedido (ship-to).
+      Combina stg_person__address, stg_person__stateprovince, stg_person__countryregion
+      e stg_sales__salesterritory via joins em cadeia.
+      Granularidade: 1 linha por endereço.
+    columns:
+      - name: pk_address
+        description: Chave primária do endereço, originada de stg_person__address.
+      - name: city
+        description: Cidade do endereço de entrega.
+      - name: stateprovincecode
+        description: Código da unidade federativa.
+      - name: stateprovince_name
+        description: Nome do estado ou província.
+      - name: countryregioncode
+        description: Código ISO do país ou região.
+      - name: country_name
+        description: Nome do país.
+      - name: territory_name
+        description: Nome do território de vendas (pode ser nulo).
+      - name: territory_group
+        description: Grupo regional do território (ex. North America, Europe, Pacific).

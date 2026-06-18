@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: dim_geography
+    description: >
+      Dimensão geográfica baseada no endereço de entrega do pedido (ship-to address).
+      Combina person_address, person_stateprovince, person_countryregion e
+      sales_salesterritory para oferecer visão hierárquica de localização.
+    columns:
+      - name: pk_address
+        description: Chave primária do endereço de entrega, originada de person_address.
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: Cidade do endereço de entrega.
+      - name: stateprovincecode
+        description: Código da unidade federativa ou estado.
+      - name: stateprovince_name
+        description: Nome do estado ou província.
+      - name: countryregioncode
+        description: Código ISO do país ou região.
+      - name: country_name
+        description: Nome do país.
+      - name: territory_name
+        description: Nome do território de vendas (pode ser nulo).
+      - name: territory_group
+        description: Grupo regional do território (ex. North America, Europe, Pacific).

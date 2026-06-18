@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: int_customers
+    description: >
+      Enriquece clientes pessoa física com dados pessoais de person_person.
+      Combina stg_sales__customer com stg_person__person via fk_person.
+      Granularidade: 1 linha por cliente.
+    columns:
+      - name: pk_customer
+        description: Chave primária do cliente, originada de stg_sales__customer.
+      - name: firstname
+        description: Primeiro nome do cliente.
+      - name: middlename
+        description: Nome do meio do cliente (pode ser nulo).
+      - name: lastname
+        description: Sobrenome do cliente.
+      - name: title
+        description: Título de tratamento (pode ser nulo).
+      - name: persontype
+        description: Tipo de pessoa no sistema Adventure Works.

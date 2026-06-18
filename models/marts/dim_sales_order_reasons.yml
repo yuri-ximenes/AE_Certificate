@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_sales_order_reasons
+    description: >
+      Dimensão de motivos de pedido com granularidade de 1 linha por pedido de venda.
+      Agrega os múltiplos registros de sales_salesorderheadersalesreason usando
+      collect_set para eliminar duplicatas, resultando em campos texto separados por vírgula.
+    columns:
+      - name: pk_salesorder
+        description: Chave do pedido de venda (dimensão degenerada da tabela fato).
+        data_tests:
+          - unique
+          - not_null
+      - name: order_reasons
+        description: Lista de nomes dos motivos do pedido, separados por vírgula.
+      - name: order_reason_types
+        description: Lista dos tipos de motivo do pedido, separados por vírgula.

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_sales__salesreason
+    description: Staging de motivos de venda catalogados. Renomeia colunas com prefixo pk_.
+    columns:
+      - name: pk_salesreason
+        description: Chave primária do motivo de venda.
+        data_tests:
+          - unique
+          - not_null
+      - name: reason_name
+        description: Descrição do motivo (ex. Price, Quality, Manufacturer).
+      - name: reason_type
+        description: Categoria do motivo (ex. Other, Promotion, Marketing).

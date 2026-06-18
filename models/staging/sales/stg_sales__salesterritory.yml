@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_sales__salesterritory
+    description: >
+      Staging de territórios de venda. Renomeia colunas com prefixos pk_/fk_.
+      Escapa coluna reservada group com backtick no Spark SQL.
+    columns:
+      - name: pk_territory
+        description: Chave primária do território.
+        data_tests:
+          - unique
+          - not_null
+      - name: territory_name
+        description: Nome do território.
+      - name: fk_countryregion
+        description: FK para stg_person__countryregion.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_person__countryregion')
+                field: pk_countryregion
+      - name: territory_group
+        description: Grupo regional do território (ex. North America, Europe, Pacific).

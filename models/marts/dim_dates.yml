@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_dates
+    description: >
+      Dimensão de datas gerada via dbt_utils.date_spine para o período de 2011-01-01
+      a 2014-12-31, cobrindo todo o histórico de pedidos Adventure Works.
+      Não possui join com tabelas fonte; é construída inteiramente por geração de datas.
+    columns:
+      - name: date_day
+        description: Data completa, chave primária da dimensão.
+        data_tests:
+          - unique
+          - not_null
+      - name: year
+        description: Ano da data.
+      - name: quarter
+        description: Trimestre do ano (1 a 4).
+      - name: month
+        description: Número do mês (1 a 12).
+      - name: month_name
+        description: Nome do mês por extenso em inglês (ex. January).
+      - name: week_of_year
+        description: Número da semana no ano.
+      - name: day_of_week
+        description: Número do dia da semana (1=Domingo, 7=Sábado no Spark SQL).
+      - name: day_of_week_name
+        description: Nome do dia da semana por extenso em inglês (ex. Monday).
+      - name: is_weekend
+        description: Indica se o dia é fim de semana (true para Sábado e Domingo).

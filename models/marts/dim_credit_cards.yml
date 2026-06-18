@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: dim_credit_cards
+    description: >
+      Dimensão de cartões de crédito. Inclui uma linha com pk_creditcard = 0
+      representando pedidos realizados sem cartão de crédito. Originada de
+      sales_creditcard via stg_sales__creditcard.
+    columns:
+      - name: pk_creditcard
+        description: Chave primária do cartão. Valor 0 representa pedidos sem cartão.
+        data_tests:
+          - unique
+          - not_null
+      - name: card_type
+        description: >
+          Bandeira do cartão (Vista, SuperiorCard, ColonialVoice, Distinguish)
+          ou 'Sem Cartão' para pk_creditcard = 0.
+        data_tests:
+          - not_null

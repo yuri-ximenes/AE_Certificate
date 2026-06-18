@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_person__stateprovince
+    description: Staging de estados e províncias. Renomeia colunas com prefixos pk_/fk_.
+    columns:
+      - name: pk_stateprovince
+        description: Chave primária do estado ou província.
+        data_tests:
+          - unique
+          - not_null
+      - name: stateprovincecode
+        description: Código da unidade federativa.
+      - name: fk_countryregion
+        description: FK para stg_person__countryregion.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_person__countryregion')
+                field: pk_countryregion
+      - name: stateprovince_name
+        description: Nome do estado ou província.
+      - name: fk_territory
+        description: FK para stg_sales__salesterritory. Pode ser nulo.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_sales__salesterritory')
+                field: pk_territory

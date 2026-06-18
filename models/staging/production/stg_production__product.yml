@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_production__product
+    description: >
+      Staging de produtos. Renomeia colunas com prefixos pk_/fk_ e calcula
+      profit como listprice - standardcost.
+    columns:
+      - name: pk_product
+        description: Chave primária do produto.
+        data_tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Nome do produto.
+      - name: listprice
+        description: Preço de lista do produto.
+      - name: standardcost
+        description: Custo padrão de produção.
+      - name: profit
+        description: Margem bruta calculada como listprice - standardcost.
+      - name: fk_productsubcategory
+        description: FK para stg_production__productsubcategory. Pode ser nulo.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_production__productsubcategory')
+                field: pk_productsubcategory

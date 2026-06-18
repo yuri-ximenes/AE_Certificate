@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_sales__salesorderdetail
+    description: >
+      Staging de itens individuais de pedido. Renomeia colunas com prefixos pk_/fk_
+      e calcula linetotal como orderqty * unitprice * (1 - unitpricediscount).
+    columns:
+      - name: pk_salesorderdetail
+        description: Chave primária do item do pedido.
+        data_tests:
+          - unique
+          - not_null
+      - name: fk_salesorder
+        description: FK para stg_sales__salesorderheader.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__salesorderheader')
+                field: pk_salesorder
+      - name: fk_product
+        description: FK para stg_production__product.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_production__product')
+                field: pk_product
+      - name: orderqty
+        description: Quantidade de itens pedidos na linha.
+      - name: unitprice
+        description: Preço unitário do produto no momento do pedido.
+      - name: unitpricediscount
+        description: Percentual de desconto aplicado ao preço unitário (0 a 1).
+      - name: linetotal
+        description: Total líquido da linha calculado como orderqty * unitprice * (1 - unitpricediscount).

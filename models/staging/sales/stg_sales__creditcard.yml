@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_sales__creditcard
+    description: >
+      Staging de cartões de crédito. Adiciona linha sintética com pk_creditcard = 0
+      representando pedidos realizados sem cartão de crédito.
+    columns:
+      - name: pk_creditcard
+        description: Chave primária do cartão. Valor 0 representa pedidos sem cartão.
+        data_tests:
+          - unique
+          - not_null
+      - name: card_type
+        description: Bandeira do cartão (Vista, SuperiorCard, ColonialVoice, Distinguish) ou 'Sem Cartão'.

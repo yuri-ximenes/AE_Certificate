@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_sales__salesorderheadersalesreason
+    description: >
+      Staging da tabela de associação M:N entre pedidos e motivos de venda.
+      Renomeia colunas com prefixo fk_.
+    columns:
+      - name: fk_salesorder
+        description: FK para stg_sales__salesorderheader.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__salesorderheader')
+                field: pk_salesorder
+      - name: fk_salesreason
+        description: FK para stg_sales__salesreason.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__salesreason')
+                field: pk_salesreason

@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: stg_person__countryregion
+    description: Staging de países e regiões. Usa countryregioncode como PK (código ISO).
+    columns:
+      - name: pk_countryregion
+        description: Chave primária — código ISO do país ou região.
+        data_tests:
+          - unique
+      - name: country_name
+        description: Nome do país ou região.

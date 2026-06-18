@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: >
+      Dimensão de produtos com hierarquia completa de categoria. Combina
+      production_product, production_productsubcategory e production_productcategory
+      via joins na camada intermediate.
+    columns:
+      - name: pk_product
+        description: Chave primária do produto, originada de production_product.
+        data_tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Nome do produto.
+      - name: listprice
+        description: Preço de lista do produto.
+      - name: standardcost
+        description: Custo padrão de produção do produto.
+      - name: profit
+        description: Margem bruta calculada como listprice - standardcost.
+      - name: subcategory_name
+        description: Nome da subcategoria do produto (pode ser nulo para produtos sem subcategoria).
+      - name: category_name
+        description: Nome da categoria do produto (pode ser nulo para produtos sem categoria).

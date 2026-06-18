@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: stg_person__address
+    description: >
+      Staging de endereços. Mantém apenas city e fk_stateprovince
+      (granularidade cidade — dados de rua e CEP excluídos por decisão de negócio).
+    columns:
+      - name: pk_address
+        description: Chave primária do endereço.
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: Cidade do endereço.
+      - name: fk_stateprovince
+        description: FK para stg_person__stateprovince.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_person__stateprovince')
+                field: pk_stateprovince

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_person__person
+    description: Staging de pessoas (clientes, funcionários etc.). Renomeia businessentityid para pk_person.
+    columns:
+      - name: pk_person
+        description: Chave primária da pessoa.
+        data_tests:
+          - unique
+          - not_null
+      - name: persontype
+        description: Tipo de pessoa no sistema Adventure Works.
+      - name: firstname
+        description: Primeiro nome.
+      - name: middlename
+        description: Nome do meio (pode ser nulo).
+      - name: lastname
+        description: Sobrenome.
+      - name: title
+        description: Título de tratamento (pode ser nulo).

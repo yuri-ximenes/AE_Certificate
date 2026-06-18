@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: int_sales_order_details
+    description: >
+      Consolida itens de pedido com informações do cabeçalho e do cartão de crédito.
+      Join entre stg_sales__salesorderdetail (base), stg_sales__salesorderheader
+      (via fk_salesorder) e stg_sales__creditcard (via fk_creditcard).
+      Granularidade: 1 linha por item de pedido.
+    columns:
+      - name: pk_salesorderdetail
+        description: Chave primária do item do pedido.
+      - name: fk_salesorder
+        description: FK para o pedido de venda.
+      - name: fk_customer
+        description: FK para o cliente do pedido.
+      - name: fk_product
+        description: FK para o produto do item.
+      - name: fk_address
+        description: FK para o endereço de entrega (ship-to address).
+      - name: fk_creditcard
+        description: FK para o cartão de crédito. Valor 0 para pedidos sem cartão.
+      - name: orderdate
+        description: Data do pedido (cast para date).
+      - name: orderqty
+        description: Quantidade de itens pedidos na linha.
+      - name: unitprice
+        description: Preço unitário do produto.
+      - name: unitpricediscount
+        description: Percentual de desconto (0 a 1).
+      - name: linetotal
+        description: Total líquido da linha com desconto aplicado.
+      - name: subtotal
+        description: Subtotal do pedido completo.
+      - name: taxamt
+        description: Valor de imposto do pedido.
+      - name: freight
+        description: Valor de frete do pedido.
+      - name: totaldue
+        description: Valor total do pedido.
+      - name: status
+        description: Status do pedido (1 a 6).
+      - name: onlineorderflag
+        description: Indica se o pedido foi feito online (true) ou por representante (false).

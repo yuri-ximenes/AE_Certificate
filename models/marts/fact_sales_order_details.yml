@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: fact_sales_order_details
+    description: >
+      Tabela fato com granularidade de 1 linha por item de pedido de venda.
+      Centraliza as métricas de vendas e referencia todas as dimensões do modelo estrela.
+      Construída a partir de sales_salesorderdetail (base) e sales_salesorderheader
+      (via fk_salesorder, para obter cliente, endereço de entrega e data do pedido).
+    columns:
+      - name: pk_fact_sales_order_detail
+        description: >
+          Chave surrogate da tabela fato, gerada via dbt_utils.generate_surrogate_key
+          a partir de pk_salesorderdetail e fk_salesorder.
+        data_tests:
+          - unique
+          - not_null
+      - name: pk_salesorderdetail
+        description: Chave natural do item do pedido, originada de sales_salesorderdetail.
+      - name: fk_salesorder
+        description: Referência ao pedido de venda em sales_salesorderheader.
+      - name: fk_customer
+        description: Chave estrangeira para dim_customers.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: pk_customer
+      - name: fk_product
+        description: Chave estrangeira para dim_products.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: pk_product
+      - name: fk_address
+        description: Chave estrangeira para dim_geography (endereço de entrega do pedido).
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_geography')
+                field: pk_address
+      - name: fk_creditcard
+        description: Chave estrangeira para dim_credit_cards. Valor 0 para pedidos sem cartão.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_credit_cards')
+                field: pk_creditcard
+      - name: orderdate
+        description: Data do pedido, usada para referenciar dim_dates.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_day
+      - name: orderqty
+        description: Quantidade de itens pedidos na linha.
+      - name: unitprice
+        description: Preço unitário do produto no momento do pedido.
+      - name: unitpricediscount
+        description: Percentual de desconto aplicado ao preço unitário (0 a 1).
+      - name: gross_linetotal
+        description: >
+          Venda bruta da linha calculada como orderqty * unitprice, sem aplicação de desconto.
+          Representa o valor bruto antes do desconto — métrica usada pela contabilidade.
+      - name: linetotal
+        description: >
+          Total líquido da linha calculado como orderqty * unitprice * (1 - unitpricediscount).
+          Coluna derivada na camada staging pois não existe na fonte.
+      - name: subtotal
+        description: Subtotal do pedido completo antes de impostos e frete.
+      - name: taxamt
+        description: Valor de imposto aplicado ao pedido.
+      - name: freight
+        description: Valor de frete do pedido.
+      - name: totaldue
+        description: Valor total do pedido incluindo subtotal, impostos e frete.
+      - name: status
+        description: >
+          Status do pedido (1=Em processamento, 2=Aprovado, 3=Pendente,
+          4=Rejeitado, 5=Enviado, 6=Cancelado).
+      - name: onlineorderflag
+        description: Indica se o pedido foi realizado online (true) ou por representante (false).

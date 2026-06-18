@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: >
+      Dimensão de clientes pessoa física. Combina dados de sales_customer com
+      informações pessoais de person_person. Clientes B2B (lojas com personid nulo)
+      são excluídos na camada staging.
+    columns:
+      - name: pk_customer
+        description: Chave primária do cliente, originada de sales_customer.
+        data_tests:
+          - unique
+          - not_null
+      - name: firstname
+        description: Primeiro nome do cliente.
+      - name: middlename
+        description: Nome do meio do cliente (pode ser nulo).
+      - name: lastname
+        description: Sobrenome do cliente.
+      - name: title
+        description: Título de tratamento do cliente (pode ser nulo).
+      - name: persontype
+        description: Tipo de pessoa no sistema Adventure Works.

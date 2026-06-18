@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: stg_sales__salesorderheader
+    description: >
+      Staging do cabeçalho de pedidos de venda. Renomeia colunas com prefixos pk_/fk_.
+      Aplica coalesce(creditcardid, 0) para garantir FK válida com dim_credit_cards.
+    columns:
+      - name: pk_salesorder
+        description: Chave primária do pedido.
+        data_tests:
+          - unique
+          - not_null
+      - name: fk_customer
+        description: FK para stg_sales__customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__customer')
+                field: pk_customer
+      - name: fk_territory
+        description: FK para stg_sales__salesterritory. Pode ser nulo.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_sales__salesterritory')
+                field: pk_territory
+      - name: fk_shiptoaddress
+        description: FK para stg_person__address — endereço de entrega do pedido.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_person__address')
+                field: pk_address
+      - name: fk_creditcard
+        description: FK para stg_sales__creditcard. Valor 0 para pedidos sem cartão (coalesce do null original).
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__creditcard')
+                field: pk_creditcard
+      - name: orderdate
+        description: Data do pedido.
+      - name: duedate
+        description: Data prevista de entrega.
+      - name: shipdate
+        description: Data de envio do pedido.
+      - name: status
+        description: Status do pedido (1 a 6).
+      - name: onlineorderflag
+        description: Indica se o pedido foi feito online (true) ou por representante (false).
+      - name: subtotal
+        description: Subtotal do pedido antes de impostos e frete.
+      - name: taxamt
+        description: Valor de imposto do pedido.
+      - name: freight
+        description: Valor de frete do pedido.
+      - name: totaldue
+        description: Valor total do pedido.
