@@ -1,13 +1,13 @@
 with
-    fonte_countryregion as (
+    source_countryregion as (
         select * from {{ source('person', 'person_countryregion') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            countryregioncode   as pk_countryregion
-            , name              as country_name
-        from fonte_countryregion
+            cast(countryregioncode as string) as pk_countryregion
+            , cast(name as string) as country_name
+        from source_countryregion
     )
 
-select * from renomeado
+select * from renamed

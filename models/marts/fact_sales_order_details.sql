@@ -1,5 +1,5 @@
 with
-    fonte_int_sales as (
+    source_sales as (
         select * from {{ ref('int_sales_order_details') }}
     )
 
@@ -7,7 +7,7 @@ with
         select
             {{
                 dbt_utils.generate_surrogate_key(['pk_salesorderdetail', 'fk_salesorder'])
-            }}                      as pk_fact_sales_order_detail
+            }} as pk_fact_sales_order_detail
             , pk_salesorderdetail
             , fk_salesorder
             , fk_customer
@@ -18,7 +18,7 @@ with
             , orderqty
             , unitprice
             , unitpricediscount
-            , orderqty * unitprice                              as gross_linetotal
+            , orderqty * unitprice as gross_linetotal
             , linetotal
             , subtotal
             , taxamt
@@ -26,7 +26,7 @@ with
             , totaldue
             , status
             , onlineorderflag
-        from fonte_int_sales
+        from source_sales
     )
 
 select * from final

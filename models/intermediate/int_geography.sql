@@ -1,37 +1,37 @@
 with
-    fonte_enderecos as (
+    source_addresses as (
         select * from {{ ref('stg_person__address') }}
     )
 
-    , fonte_estados as (
+    , source_states as (
         select * from {{ ref('stg_person__stateprovince') }}
     )
 
-    , fonte_paises as (
+    , source_countries as (
         select * from {{ ref('stg_person__countryregion') }}
     )
 
-    , fonte_territorios as (
+    , source_territories as (
         select * from {{ ref('stg_sales__salesterritory') }}
     )
 
-    , geografia_enriquecida as (
+    , geography_enriched as (
         select
-            fonte_enderecos.pk_address
-            , fonte_enderecos.city
-            , fonte_estados.stateprovincecode
-            , fonte_estados.stateprovince_name
-            , fonte_paises.pk_countryregion         as countryregioncode
-            , fonte_paises.country_name
-            , fonte_territorios.territory_name
-            , fonte_territorios.territory_group
-        from fonte_enderecos
-        inner join fonte_estados
-            on fonte_enderecos.fk_stateprovince = fonte_estados.pk_stateprovince
-        inner join fonte_paises
-            on fonte_estados.fk_countryregion = fonte_paises.pk_countryregion
-        left join fonte_territorios
-            on fonte_estados.fk_territory = fonte_territorios.pk_territory
+            source_addresses.pk_address
+            , source_addresses.city
+            , source_states.stateprovincecode
+            , source_states.stateprovince_name
+            , source_countries.pk_countryregion as countryregioncode
+            , source_countries.country_name
+            , source_territories.territory_name
+            , source_territories.territory_group
+        from source_addresses
+        inner join source_states
+            on source_addresses.fk_stateprovince = source_states.pk_stateprovince
+        inner join source_countries
+            on source_states.fk_countryregion = source_countries.pk_countryregion
+        left join source_territories
+            on source_states.fk_territory = source_territories.pk_territory
     )
 
-select * from geografia_enriquecida
+select * from geography_enriched

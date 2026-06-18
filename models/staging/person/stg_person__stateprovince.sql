@@ -1,16 +1,16 @@
 with
-    fonte_stateprovince as (
+    source_stateprovince as (
         select * from {{ source('person', 'person_stateprovince') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            stateprovinceid         as pk_stateprovince
-            , stateprovincecode
-            , countryregioncode     as fk_countryregion
-            , name                  as stateprovince_name
-            , territoryid           as fk_territory
-        from fonte_stateprovince
+            cast(stateprovinceid as bigint) as pk_stateprovince
+            , cast(stateprovincecode as string) as stateprovincecode
+            , cast(countryregioncode as string) as fk_countryregion
+            , cast(name as string) as stateprovince_name
+            , cast(territoryid as bigint) as fk_territory
+        from source_stateprovince
     )
 
-select * from renomeado
+select * from renamed

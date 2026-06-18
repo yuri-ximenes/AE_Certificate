@@ -1,28 +1,28 @@
 with
-    fonte_motivos_pedido as (
+    source_order_reasons as (
         select * from {{ ref('stg_sales__salesorderheadersalesreason') }}
     )
 
-    , fonte_motivos as (
+    , source_reasons as (
         select * from {{ ref('stg_sales__salesreason') }}
     )
 
-    , motivos_unidos as (
+    , reasons_joined as (
         select
-            fonte_motivos_pedido.fk_salesorder
-            , fonte_motivos.reason_name
-            , fonte_motivos.reason_type
-        from fonte_motivos_pedido
-        inner join fonte_motivos
-            on fonte_motivos_pedido.fk_salesreason = fonte_motivos.pk_salesreason
+            source_order_reasons.fk_salesorder
+            , source_reasons.reason_name
+            , source_reasons.reason_type
+        from source_order_reasons
+        inner join source_reasons
+            on source_order_reasons.fk_salesreason = source_reasons.pk_salesreason
     )
 
     , final as (
         select
-            fk_salesorder                                       as pk_salesorder
-            , array_join(collect_set(reason_name), ', ')        as order_reasons
-            , array_join(collect_set(reason_type), ', ')        as order_reason_types
-        from motivos_unidos
+            fk_salesorder as pk_salesorder
+            , array_join(collect_set(reason_name), ', ') as order_reasons
+            , array_join(collect_set(reason_type), ', ') as order_reason_types
+        from reasons_joined
         group by fk_salesorder
     )
 

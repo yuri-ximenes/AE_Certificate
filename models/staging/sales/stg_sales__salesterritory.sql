@@ -1,15 +1,15 @@
 with
-    fonte_salesterritory as (
+    source_salesterritory as (
         select * from {{ source('sales', 'sales_salesterritory') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            territoryid             as pk_territory
-            , name                  as territory_name
-            , countryregioncode     as fk_countryregion
-            , `group`               as territory_group
-        from fonte_salesterritory
+            cast(territoryid as bigint) as pk_territory
+            , cast(name as string) as territory_name
+            , cast(countryregioncode as string) as fk_countryregion
+            , cast(`group` as string) as territory_group
+        from source_salesterritory
     )
 
-select * from renomeado
+select * from renamed

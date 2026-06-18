@@ -1,16 +1,16 @@
 with
-    fonte_customer as (
+    source_customer as (
         select * from {{ source('sales', 'sales_customer') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            customerid      as pk_customer
-            , personid      as fk_person
-            , storeid       as fk_store
-            , territoryid   as fk_territory
-        from fonte_customer
+            cast(customerid as bigint) as pk_customer
+            , cast(personid as bigint) as fk_person
+            , cast(storeid as bigint) as fk_store
+            , cast(territoryid as bigint) as fk_territory
+        from source_customer
         where personid is not null
     )
 
-select * from renomeado
+select * from renamed

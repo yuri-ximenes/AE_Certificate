@@ -1,14 +1,14 @@
 with
-    fonte_address as (
+    source_address as (
         select * from {{ source('person', 'person_address') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            addressid           as pk_address
-            , city
-            , stateprovinceid   as fk_stateprovince
-        from fonte_address
+            cast(addressid as bigint) as pk_address
+            , cast(city as string) as city
+            , cast(stateprovinceid as bigint) as fk_stateprovince
+        from source_address
     )
 
-select * from renomeado
+select * from renamed

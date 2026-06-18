@@ -1,13 +1,13 @@
 with
-    fonte_productcategory as (
+    source_productcategory as (
         select * from {{ source('production', 'production_productcategory') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            productcategoryid   as pk_productcategory
-            , name              as category_name
-        from fonte_productcategory
+            cast(productcategoryid as bigint) as pk_productcategory
+            , cast(name as string) as category_name
+        from source_productcategory
     )
 
-select * from renomeado
+select * from renamed

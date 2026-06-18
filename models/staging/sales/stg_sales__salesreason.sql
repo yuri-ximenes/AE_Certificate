@@ -1,14 +1,14 @@
 with
-    fonte_salesreason as (
+    source_salesreason as (
         select * from {{ source('sales', 'sales_salesreason') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            salesreasonid   as pk_salesreason
-            , name          as reason_name
-            , reasontype    as reason_type
-        from fonte_salesreason
+            cast(salesreasonid as bigint) as pk_salesreason
+            , cast(name as string) as reason_name
+            , cast(reasontype as string) as reason_type
+        from source_salesreason
     )
 
-select * from renomeado
+select * from renamed

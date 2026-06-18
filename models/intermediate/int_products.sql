@@ -1,30 +1,30 @@
 with
-    fonte_produtos as (
+    source_products as (
         select * from {{ ref('stg_production__product') }}
     )
 
-    , fonte_subcategorias as (
+    , source_subcategories as (
         select * from {{ ref('stg_production__productsubcategory') }}
     )
 
-    , fonte_categorias as (
+    , source_categories as (
         select * from {{ ref('stg_production__productcategory') }}
     )
 
-    , produtos_enriquecido as (
+    , products_enriched as (
         select
-            fonte_produtos.pk_product
-            , fonte_produtos.product_name
-            , fonte_produtos.listprice
-            , fonte_produtos.standardcost
-            , fonte_produtos.profit
-            , fonte_subcategorias.subcategory_name
-            , fonte_categorias.category_name
-        from fonte_produtos
-        left join fonte_subcategorias
-            on fonte_produtos.fk_productsubcategory = fonte_subcategorias.pk_productsubcategory
-        left join fonte_categorias
-            on fonte_subcategorias.fk_productcategory = fonte_categorias.pk_productcategory
+            source_products.pk_product
+            , source_products.product_name
+            , source_products.listprice
+            , source_products.standardcost
+            , source_products.profit
+            , source_subcategories.subcategory_name
+            , source_categories.category_name
+        from source_products
+        left join source_subcategories
+            on source_products.fk_productsubcategory = source_subcategories.pk_productsubcategory
+        left join source_categories
+            on source_subcategories.fk_productcategory = source_categories.pk_productcategory
     )
 
-select * from produtos_enriquecido
+select * from products_enriched

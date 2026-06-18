@@ -1,17 +1,17 @@
 with
-    fonte_person as (
+    source_person as (
         select * from {{ source('person', 'person_person') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            businessentityid    as pk_person
-            , persontype
-            , firstname
-            , middlename
-            , lastname
-            , title
-        from fonte_person
+            cast(businessentityid as bigint) as pk_person
+            , cast(persontype as string) as persontype
+            , cast(firstname as string) as firstname
+            , cast(middlename as string) as middlename
+            , cast(lastname as string) as lastname
+            , cast(title as string) as title
+        from source_person
     )
 
-select * from renomeado
+select * from renamed

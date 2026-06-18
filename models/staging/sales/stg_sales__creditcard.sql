@@ -1,25 +1,25 @@
 with
-    fonte_creditcard as (
+    source_creditcard as (
         select * from {{ source('sales', 'sales_creditcard') }}
     )
 
-    , renomeado as (
+    , renamed as (
         select
-            cast(creditcardid as bigint)     as pk_creditcard
-            , cardtype                       as card_type
-        from fonte_creditcard
+            cast(creditcardid as bigint) as pk_creditcard
+            , cast(cardtype as string) as card_type
+        from source_creditcard
     )
 
-    , sem_cartao as (
+    , no_card as (
         select
-            0               as pk_creditcard
-            , 'Sem Cartão'  as card_type
+            cast(0 as bigint) as pk_creditcard
+            , cast('Sem Cartão' as string) as card_type
     )
 
     , final as (
-        select * from renomeado
+        select * from renamed
         union all
-        select * from sem_cartao
+        select * from no_card
     )
 
 select * from final

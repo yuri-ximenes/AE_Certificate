@@ -1,34 +1,34 @@
 with
-    fonte_itens as (
+    source_items as (
         select * from {{ ref('stg_sales__salesorderdetail') }}
     )
 
-    , fonte_cabecalho as (
+    , source_header as (
         select * from {{ ref('stg_sales__salesorderheader') }}
     )
 
     , final as (
         select
-            fonte_itens.pk_salesorderdetail
-            , fonte_itens.fk_salesorder
-            , fonte_cabecalho.fk_customer
-            , fonte_itens.fk_product
-            , fonte_cabecalho.fk_shiptoaddress              as fk_address
-            , fonte_cabecalho.fk_creditcard
-            , cast(fonte_cabecalho.orderdate as date)       as orderdate
-            , fonte_itens.orderqty
-            , fonte_itens.unitprice
-            , fonte_itens.unitpricediscount
-            , fonte_itens.linetotal
-            , fonte_cabecalho.subtotal
-            , fonte_cabecalho.taxamt
-            , fonte_cabecalho.freight
-            , fonte_cabecalho.totaldue
-            , fonte_cabecalho.status
-            , fonte_cabecalho.onlineorderflag
-        from fonte_itens
-        inner join fonte_cabecalho
-            on fonte_itens.fk_salesorder = fonte_cabecalho.pk_salesorder
+            source_items.pk_salesorderdetail
+            , source_items.fk_salesorder
+            , source_header.fk_customer
+            , source_items.fk_product
+            , source_header.fk_shiptoaddress as fk_address
+            , source_header.fk_creditcard
+            , source_header.orderdate
+            , source_items.orderqty
+            , source_items.unitprice
+            , source_items.unitpricediscount
+            , source_items.linetotal
+            , source_header.subtotal
+            , source_header.taxamt
+            , source_header.freight
+            , source_header.totaldue
+            , source_header.status
+            , source_header.onlineorderflag
+        from source_items
+        inner join source_header
+            on source_items.fk_salesorder = source_header.pk_salesorder
     )
 
 select * from final
