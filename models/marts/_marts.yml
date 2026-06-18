@@ -55,10 +55,10 @@ models:
           4=Rejeitado, 5=Enviado, 6=Cancelado).
       - name: onlineorderflag
         description: Indica se o pedido foi realizado online (true) ou por representante (false).
-      - name: card_type
+      - name: fk_creditcard
         description: >
-          Bandeira do cartão de crédito utilizado no pedido (ex. Vista, SuperiorCard,
-          ColonialVoice, Distinguish). Nulo para pedidos sem cartão de crédito.
+          Chave estrangeira para dim_credit_cards. Valor 0 indica pedido realizado
+          sem cartão de crédito.
 
   - name: dim_customers
     description: >
@@ -159,6 +159,24 @@ models:
         description: Nome do dia da semana por extenso em inglês (ex. Monday).
       - name: is_weekend
         description: Indica se o dia é fim de semana (true para Sábado e Domingo).
+
+  - name: dim_credit_cards
+    description: >
+      Dimensão de cartões de crédito. Inclui uma linha com pk_creditcard = 0
+      representando pedidos realizados sem cartão de crédito. Originada de
+      sales_creditcard via stg_sales__creditcard.
+    columns:
+      - name: pk_creditcard
+        description: Chave primária do cartão. Valor 0 representa pedidos sem cartão.
+        data_tests:
+          - unique
+          - not_null
+      - name: card_type
+        description: >
+          Bandeira do cartão (Vista, SuperiorCard, ColonialVoice, Distinguish)
+          ou 'Sem Cartão' para pk_creditcard = 0.
+        data_tests:
+          - not_null
 
   - name: dim_sales_order_reasons
     description: >

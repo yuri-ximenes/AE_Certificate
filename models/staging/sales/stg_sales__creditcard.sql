@@ -5,9 +5,21 @@ with
 
     , renomeado as (
         select
-            creditcardid    as pk_creditcard
-            , cardtype      as card_type
+            cast(creditcardid as bigint)     as pk_creditcard
+            , cardtype                       as card_type
         from fonte_creditcard
     )
 
-select * from renomeado
+    , sem_cartao as (
+        select
+            0               as pk_creditcard
+            , 'Sem Cartão'  as card_type
+    )
+
+    , final as (
+        select * from renomeado
+        union all
+        select * from sem_cartao
+    )
+
+select * from final

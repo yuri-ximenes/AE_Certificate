@@ -13,6 +13,7 @@ with
             , fk_customer
             , fk_product
             , fk_address
+            , fk_creditcard
             , orderdate
             , orderqty
             , unitprice
@@ -25,7 +26,6 @@ with
             , totaldue
             , status
             , onlineorderflag
-            , card_type
         from fonte_int_sales
     )
 

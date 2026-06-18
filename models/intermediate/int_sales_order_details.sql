@@ -7,10 +7,6 @@ with
         select * from {{ ref('stg_sales__salesorderheader') }}
     )
 
-    , fonte_cartao as (
-        select * from {{ ref('stg_sales__creditcard') }}
-    )
-
     , final as (
         select
             fonte_itens.pk_salesorderdetail
@@ -18,6 +14,7 @@ with
             , fonte_cabecalho.fk_customer
             , fonte_itens.fk_product
             , fonte_cabecalho.fk_shiptoaddress              as fk_address
+            , fonte_cabecalho.fk_creditcard
             , cast(fonte_cabecalho.orderdate as date)       as orderdate
             , fonte_itens.orderqty
             , fonte_itens.unitprice
@@ -29,12 +26,9 @@ with
             , fonte_cabecalho.totaldue
             , fonte_cabecalho.status
             , fonte_cabecalho.onlineorderflag
-            , fonte_cartao.card_type
         from fonte_itens
         inner join fonte_cabecalho
             on fonte_itens.fk_salesorder = fonte_cabecalho.pk_salesorder
-        left join fonte_cartao
-            on fonte_cabecalho.fk_creditcard = fonte_cartao.pk_creditcard
     )
 
 select * from final
