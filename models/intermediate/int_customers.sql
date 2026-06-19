@@ -15,6 +15,7 @@ with
             , source_persons.lastname
             , source_persons.title
             , source_persons.persontype
+            , concat(source_persons.firstname, ' ', source_persons.lastname) as fullname
         from source_customers
         inner join source_persons
             on source_customers.fk_person = source_persons.pk_person

@@ -22,3 +22,5 @@ models:
         description: Título de tratamento do cliente (pode ser nulo).
       - name: persontype
         description: Tipo de pessoa no sistema Adventure Works.
+      - name: fullname
+        description: Nome completo do cliente, concatenando firstname e lastname.
