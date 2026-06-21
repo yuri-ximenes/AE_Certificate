@@ -18,11 +18,8 @@ with
             , orderqty
             , unitprice
             , unitpricediscount
-            , standardcost
             , orderqty * unitprice as gross_linetotal
             , linetotal
-            , orderqty * standardcost                as cost_linetotal
-            , linetotal - (orderqty * standardcost)  as gross_profit
             , subtotal
             , taxamt
             , freight

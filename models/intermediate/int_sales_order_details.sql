@@ -7,10 +7,6 @@ with
         select * from {{ ref('stg_sales__salesorderheader') }}
     )
 
-    , source_products as (
-        select * from {{ ref('stg_production__product') }}
-    )
-
     , final as (
         select
             source_items.pk_salesorderdetail
@@ -23,7 +19,6 @@ with
             , source_items.orderqty
             , source_items.unitprice
             , source_items.unitpricediscount
-            , source_products.standardcost
             , source_items.linetotal
             , source_header.subtotal
             , source_header.taxamt
@@ -34,8 +29,6 @@ with
         from source_items
         inner join source_header
             on source_items.fk_salesorder = source_header.pk_salesorder
-        left join source_products
-            on source_items.fk_product = source_products.pk_product
     )
 
 select * from final
