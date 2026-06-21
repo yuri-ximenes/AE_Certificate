@@ -22,7 +22,3 @@ models:
         description: Código ISO do país ou região.
       - name: country_name
         description: Nome do país.
-      - name: territory_name
-        description: Nome do território de vendas (pode ser nulo).
-      - name: territory_group
-        description: Grupo regional do território (ex. North America, Europe, Pacific).
