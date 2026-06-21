@@ -24,7 +24,6 @@ with
             , taxamt
             , freight
             , totaldue
-            , status
             , onlineorderflag
         from source_sales
     )

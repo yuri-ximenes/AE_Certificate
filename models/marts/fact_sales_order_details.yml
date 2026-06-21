@@ -76,9 +76,5 @@ models:
         description: Valor de frete do pedido.
       - name: totaldue
         description: Valor total do pedido incluindo subtotal, impostos e frete.
-      - name: status
-        description: >
-          Status do pedido (1=Em processamento, 2=Aprovado, 3=Pendente,
-          4=Rejeitado, 5=Enviado, 6=Cancelado).
       - name: onlineorderflag
         description: Indica se o pedido foi realizado online (true) ou por representante (false).

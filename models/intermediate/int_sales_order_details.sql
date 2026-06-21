@@ -24,7 +24,6 @@ with
             , source_header.taxamt
             , source_header.freight
             , source_header.totaldue
-            , source_header.status
             , source_header.onlineorderflag
         from source_items
         inner join source_header
