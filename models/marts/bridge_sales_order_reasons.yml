@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: bridge_sales_order_reasons
+    description: >
+      Tabela ponte para relacionamento muitos-para-muitos entre pedidos de venda e motivos de venda.
+      Granularidade de 1 linha por par (fk_salesorder, reason_name), permitindo filtragem
+      por motivo individual no Power BI via relacionamento com fact_sales_order_details.
+    columns:
+      - name: fk_salesorder
+        description: Chave estrangeira para fact_sales_order_details (via fk_salesorder).
+        data_tests:
+          - not_null
+      - name: reason_name
+        description: Nome do motivo de venda (ex. Price, Promotion, Review).
+        data_tests:
+          - not_null
+      - name: reason_type
+        description: Tipo do motivo de venda (ex. Marketing, Other).
+        data_tests:
+          - not_null
