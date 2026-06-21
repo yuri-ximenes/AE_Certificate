@@ -60,6 +60,8 @@ models:
         description: Preço unitário do produto no momento do pedido.
       - name: unitpricediscount
         description: Percentual de desconto aplicado ao preço unitário (0 a 1).
+      - name: standardcost
+        description: Custo padrão unitário do produto no momento do pedido, originado de production_product.
       - name: gross_linetotal
         description: >
           Venda bruta da linha calculada como orderqty * unitprice, sem aplicação de desconto.
@@ -68,6 +70,10 @@ models:
         description: >
           Total líquido da linha calculado como orderqty * unitprice * (1 - unitpricediscount).
           Coluna derivada na camada staging pois não existe na fonte.
+      - name: cost_linetotal
+        description: Custo total da linha calculado como orderqty * standardcost.
+      - name: gross_profit
+        description: Lucro bruto da linha calculado como linetotal - cost_linetotal.
       - name: subtotal
         description: Subtotal do pedido completo antes de impostos e frete.
       - name: taxamt
